@@ -1,4 +1,5 @@
 # Classificação de texto com avaliações de filmes
+from sklearn import metrics
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
@@ -46,3 +47,20 @@ test_data = keras.preprocessing.sequence.pad_sequences(test_data,value=word_dict
 
 # print(len(train_data[0]), len(train_data[1])) -> Tamanho dos exemplos
 print(train_data[0])
+
+#--------------====== Construindo modelo ----------------------------
+
+# O formato de entrada é a contagem vocabulário usados pelas avaliações dos filmes (10000 palavras)
+vocab_size = 10000
+
+model = keras.Sequential()
+model.add(keras.layers.Embedding(vocab_size,16))
+model.add(keras.layers.Dense(16, activation='relu'))
+model.add(keras.layers.Dense(1, activation='sigmoid'))
+
+print(model.summary())
+
+#Usando função Loss para tratar a saída em probabilidade (deve ser em binário)
+model.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
+
+#----------- Conjunto de validação --------------------------------
